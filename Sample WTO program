@@ -1,0 +1,25 @@
+TEST     CSECT
+         BASR  12,0
+         USING *,12
+         ST    13,SAVE+4     SAVE BACK CHAIN
+         LA    11,SAVE       SET UP FORWARD CHAIN
+         ST    11,8(13)      SAVE FORWARD CHAIN
+         LR    13,11         SET UP FOR NEXT SAVE AREA CHAIN
+         WTO   'HELLO'
+         WTO   'JUST1'
+         OPEN  (SYSOUT,OUTPUT)
+         MVC   OUTR,T1
+         PUT   SYSOUT,OUTR
+*        CLOSE (SYSOUT)
+         L     13,SAVE+4     GET BACK CHAIN
+         LM    14,12,12(13)  RESTORE REGISTERS
+         LA    15,0
+         BR    14
+SAVE     DS    18F
+T1       DS    0CL80
+         DC    H'04'
+         DC    C'TEST'
+         DC    CL74' '
+OUTR     DS    CL80
+SYSOUT   DCB   DDNAME=SYSOUT,DSORG=PS,MACRF=PM,RECFM=FB,LRECL=80
+         END   TEST
